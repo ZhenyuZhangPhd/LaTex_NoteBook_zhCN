@@ -1,0 +1,489 @@
+\documentclass[12pt,a4paper]{article}% 文档格式
+\usepackage{ctex,hyperref}% 输出汉字
+\usepackage{times}% 英文使用Times New Roman
+\title{\fontsize{18pt}{27pt}\selectfont% 小四字号，1.5倍行距
+	{\heiti% 黑体 
+		无线通信的基础知识}}% 题目
+\author{\fontsize{12pt}{18pt}\selectfont% 小四字号，1.5倍行距
+	{\fangsong% 仿宋
+		张振宇}\thanks{通信作者，email：zzy1997@my.swjtu.edu.cn}\\% 标题栏脚注
+	\fontsize{10.5pt}{15.75pt}\selectfont% 五号字号，1.5倍行距
+	{\fangsong% 仿宋
+		(西南交通大学)}}% 作者单位，“~”表示空格
+\date{}% 日期（这里避免生成日期）
+\usepackage{amsmath,amsfonts,amssymb}% 为公式输入创造条件的宏包
+\usepackage{graphicx}% 图片插入宏包
+\usepackage{subfigure}% 并排子图
+\usepackage{float}% 浮动环境，用于调整图片位置
+\usepackage[export]{adjustbox}% 防止过宽的图片
+\usepackage{bibentry}
+\usepackage{natbib}% 以上2个为参考文献宏包
+\usepackage{abstract}% 两栏文档，一栏摘要及关键字宏包
+\renewcommand{\abstracttextfont}{\fangsong}% 摘要内容字体为仿宋
+\renewcommand{\abstractname}{\textbf{摘\quad 要}}% 更改摘要二字的样式
+\usepackage{xcolor}% 字体颜色宏包
+\newcommand{\red}[1]{\textcolor[rgb]{1.00,0.00,0.00}{#1}}
+\newcommand{\blue}[1]{\textcolor[rgb]{0.00,0.00,1.00}{#1}}
+\newcommand{\green}[1]{\textcolor[rgb]{0.00,1.00,0.00}{#1}}
+\newcommand{\darkblue}[1]
+{\textcolor[rgb]{0.00,0.00,0.50}{#1}}
+\newcommand{\darkgreen}[1]
+{\textcolor[rgb]{0.00,0.37,0.00}{#1}}
+\newcommand{\darkred}[1]{\textcolor[rgb]{0.60,0.00,0.00}{#1}}
+\newcommand{\brown}[1]{\textcolor[rgb]{0.50,0.30,0.00}{#1}}
+\newcommand{\purple}[1]{\textcolor[rgb]{0.50,0.00,0.50}{#1}}% 为使用方便而编辑的新指令
+\usepackage{url}% 超链接
+\usepackage{bm}% 加粗部分公式
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{epstopdf}
+\usepackage{epsfig}
+\usepackage{longtable}% 长表格
+\usepackage{supertabular}% 跨页表格
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{changepage}% 换页
+\usepackage{enumerate}% 短编号
+\usepackage{caption}% 设置标题
+% \captionsetup[figure]{name=\fontsize{10pt}{15pt}\selectfont Figure}% 设置图片编号头
+% \captionsetup[table]{name=\fontsize{10pt}{15pt}\selectfont Table}% 设置表格编号头
+\usepackage{indentfirst}% 中文首行缩进
+\usepackage[left=2.50cm,right=2.50cm,top=2.80cm,bottom=2.50cm]{geometry}% 页边距设置
+\renewcommand{\baselinestretch}{1.5}% 定义行间距（1.5）
+\usepackage{fancyhdr} %设置全文页眉、页脚的格式
+\pagestyle{fancy}
+\hypersetup{colorlinks=true,linkcolor=black}% 去除引用红框，改变颜色
+
+\begin{document}% 以下为正文内容
+	\maketitle% 产生标题，没有它无法显示标题
+	\lhead{}% 页眉左边设为空
+	\chead{}% 页眉中间设为空
+	\rhead{}% 页眉右边设为空
+	\lfoot{}% 页脚左边设为空
+	\cfoot{\thepage}% 页脚中间显示页码
+	\rfoot{}% 页脚右边设为空
+	\begin{abstract}
+		\fangsong 作为写作练习的工具，同时也帮助自己理解基础知识。首先介绍了Zak变换的基本概念，然后推导了Zak变换的公式，最后给出了Zak变换的基本性质。\\
+	\end{abstract}
+	
+	\begin{adjustwidth}{1.06cm}{1.06cm}
+		\fontsize{10.5pt}{15.75pt}\selectfont{\heiti{关键词：}\fangsong{无线通信、Zak变换}}\\
+	\end{adjustwidth}
+	
+	\begin{center}% 居中处理
+		{\textbf{Abstract}}% 英文摘要
+	\end{center}
+	\begin{adjustwidth}{1.06cm}{1.06cm}% 英文摘要内容
+		\hspace{1.5em}Attention！If you input "dif{}ferent", the computer will output "different", but if you input "dif\{\}ferent", the computer will output "dif{}ferent"
+	\end{adjustwidth}
+	\newpage% 从新的一页继续
+
+	\section{Zak变换的介绍}% 一级标题
+	Zak变换的起源应该需要看时频域分析的内容，如Gabor变换，Wigner-Ville分布等。Zak变换是一种时频分析方法，是一种时域和频域的联合分析方法。	步长为T的Zak变换有如下的形式(Zak transform with step $T$， 在Hadani（OTFS提出者）的书中，$T = \tau_p$，$\nu_p = \frac{1}{\tau_p}$)：
+	\begin{equation}
+		\label{eq1}
+		\begin{aligned}
+			\mathcal{Z}\{x[n]\}(\tau, \nu) = \sqrt{T} \sum_{n = -\infty}^{+\infty} x(\tau + nT)e^{-j2\pi \nu nT}
+		\end{aligned}
+	\end{equation}
+	Zak变换可以写作：
+	\begin{equation}
+		\label{eq2}
+		\begin{aligned}
+			\mathcal{Z}\{x[n]\}(\tau, \nu) & =\sqrt{T}\sum_{n=-\infty}^{+\infty}x\Big(\tau+nT\Big)e^{-j2\pi nT\nu}  \\
+			&=\sqrt{T}\sum_{n=-\infty}^{+\infty}\underbrace{\left[\int_{-\infty}^{\infty}X\left(f\right)e^{j2\pi f\left(\tau+nT\right)}df\right]}_{x\left(\tau+nT\right)}e^{-j2\pi nT\nu} \\
+			&=\sqrt{T}\sum_{n=-\infty}^{+\infty}\int_{-\infty}^{\infty}X\left(f\right)e^{j2\pi f\left(\tau+nT\right)}e^{-j2\pi nT\nu}df \\
+			&=\sqrt{T}\sum_{n=-\infty}^{+\infty}\underbrace{\int_{-\infty}^{\infty}X\left(f\right)e^{j2\pi f\tau}e^{j2\pi nT\left(f-\nu\right)}df}_{\mathrm{conv}\left(X(\nu)e^{j2\pi\nu\tau},e^{j2\pi nT\nu}\right)} \\
+			&=\sqrt{T}\sum_{n=-\infty}^{+\infty}X(\nu)e^{j2\pi\nu\tau}*e^{-j2\pi nT\nu} \\
+			&=\sqrt{T}\cdot X(\nu)e^{j2\pi\nu\tau}*\sum_{n=-\infty}^{+\infty}e^{-j2\pi nT\nu} \\
+			&=\sqrt{T}\cdot X(\nu)e^{j2\pi\nu\tau}*\left[\frac{1}{T}\sum_{n=-\infty}^{+\infty}\delta\left(\nu-\frac{n}{T}\right)\right] \\
+			&=\frac1{\sqrt T}\sum_{n=-\infty}^{+\infty}X\Big(\nu-\frac nT\Big)e^{j2\pi\tau(\nu-\frac nT)}
+		\end{aligned}
+	\end{equation}
+	推导的过程中利用了傅里叶级数的代替，即
+	\begin{equation}
+		\label{eq3}
+		\begin{aligned}
+		\sum_{n=-\infty}^{+\infty}&\delta(t-nT_0)=\sum_{n=-\infty}^{+\infty}c_ne^{j2\pi n\frac{t}{T_0}},\\
+		\textrm{where, }
+		c_{n} & =\frac{1}{T_{0}}\int_{-\frac{T_{0}}{2}}^{\frac{T_{0}}{2}}\sum_{m=-\infty}^{\infty}\delta(t-mT_{0})e^{-j2m\frac{t}{T_{0}}}dt \\
+		&=\frac{1}{T_{0}}\int_{-\frac{T_{0}}{2}}^{\frac{T_{0}}{2}}\delta(t)e^{-j2m\frac{t}{T_{0}}}dt \\
+		&=\frac{1}{T_{0}}\int_{-\frac{T_{0}}{2}}^{\frac{T_{0}}{2}}\delta(t)e^{-j2m\frac{0}{T_{0}}}dt=\frac{1}{T_{0}}
+		\end{aligned}
+	\end{equation}
+
+	Zak变换的过程可以理解为对$[-\infty,\infty]$上的时间信号进行分解，设定Zak变换的步长T，也是抽样的周期，得到抽样的信号$x(\tau+nT)$，接着对该信号进行DTFT（离散时间傅里叶变换）的结果就是Zak变换的沿着$\nu$轴的结果，即$\mathcal{Z}\{x[n]\}_\tau(\nu)$。在这个过程中，我们可以看到Zak变换的结果是一个在$\nu$轴上的周期函数（周期是否是1/T）。然后改变不同的起始点$\tau$，我们可以得到Zak变换的二维结果。
+	
+	离散时间傅里叶变换（DTFT）的公式为
+	\begin{equation}
+		\label{eq301}
+		\begin{aligned}
+			X_{1/T}(f)&\triangleq\sum_{n=-\infty}^\infty\underbrace{T\cdot x(nT)}_{x[n]}e^{-j2\pi fTn} \\&= T\sum_{n=-\infty}^\infty x(nT)e^{-j2\pi fnT}\\
+			\mathcal{Z}\{x[n]\}(\tau, \nu) &= \sqrt{T} \sum_{n = -\infty}^{+\infty} x(\tau + nT)e^{-j2\pi \nu nT}
+		\end{aligned}
+	\end{equation}
+	
+	Zak变换就可以看做是改变时间起点的DTFT，由于傅里叶变换的性质，可以得到沿着$\tau$轴Z变换的性质。
+	\begin{equation}
+		\label{eq302}
+		\begin{aligned}
+			x(t+t_0) -> e^{j2\pi ft_0}X(f)\\
+			Z_T\Big[x(t+mT)\Big](\tau,\nu)=e^{j2\pi mT\nu}Z_T\Big[x(t)\Big](\tau,\nu)
+		\end{aligned}
+	\end{equation}
+
+	之所以说Zak变换是准周期的，是由于 $\nu$ 轴上由于DTFT会呈现周期性，而 $\tau$ 轴上又有FT的特性。
+
+	在一个周期块内的Zak变换也可以理解为先对信号进行串并转换，转换成二维的时延-时间域信号后沿着时间轴进行傅里叶变换的结果，多普勒域的点数就是$x(\tau+nT)$中n的点数,一般是N（这里将DTFT简化为DFT，所以只考虑一个多普勒周期），时延的点数一般是M个，即信号的最小时间单位是1/（MN）。
+
+	Zak变换还可以写作：
+	\begin{equation}
+		\label{eq4}
+		\begin{aligned}
+			\mathcal{Z}\{x[n]\}(\tau, \nu) &= \langle x(t),\Phi_{\tau,\nu}(t)\rangle=\int_{-\infty}^{+\infty}x(t)\Phi_{\tau,\nu}^{*}(t)dt
+		\end{aligned}
+	\end{equation}
+	其中$\Phi_{\tau,\nu}(t)$是Zak基函数，可以写作：
+	\begin{equation}
+		\label{eq5}
+		\begin{aligned}
+			\Phi_{\tau,\nu}(t) = \sqrt{T}\sum_{n=-\infty}^{+\infty}\delta(t-\tau-nT)e^{j2\pi nT \nu}
+		\end{aligned}
+	\end{equation}
+	其傅里叶变换为：
+	\begin{equation}
+		\label{eq6}
+		\begin{aligned}
+			\mathcal{F}\{\Phi_{\tau,\nu}(t)\}(f)&=\int_{-\infty}^{+\infty}\sqrt{T}\sum_{n=-\infty}^{+\infty}\delta\Big(t-\tau-nT\Big)e^{j2\pi nT\nu}e^{-j2\pi ft}dt \\
+			&=\sqrt{T}\sum_{n=-\infty}^{+\infty}\int_{-\infty}^{+\infty}\delta(t-\tau-nT)e^{j2\pi nT\nu}e^{-j2\pi ft}dt \\
+			&=\sqrt{T}\sum_{n=-\infty}^{+\infty}e^{j2\pi nT\nu}e^{-j2\pi f\left(\tau+nT\right)} \\
+			&=\sqrt{T}e^{-j2\pi f\tau}\sum_{n=-\infty}^{+\infty}e^{j2\pi nT\left(\nu-f\right)} \\
+			&=\frac{1}{\sqrt{T}}e^{-j2\pi f\tau}\underbrace{\sum_{n=-\infty}^{+\infty}Te^{j2\pi nT\left(\nu-f\right)}}_{FourierSeries} \\
+			&=\frac{1}{\sqrt{T}}e^{-j2\pi f\tau}\sum_{n=-\infty}^{+\infty}\delta\left(\nu-f-n\frac{1}{T}\right) \\
+			&=\frac{1}{\sqrt{T}}e^{-j2\pi f\tau}\sum_{n=-\infty}^{+\infty}\delta\left(f-\nu-n\frac{1}{T}\right)
+		\end{aligned}
+	\end{equation}
+	即：
+	\begin{equation}
+		\label{eq7}
+		\begin{aligned}
+			\mathcal{F}\{\sqrt{T}\sum_{n=-\infty}^{+\infty}\delta(t-\tau-nT)e^{j2\pi nT \nu}\} = \frac{1}{\sqrt{T}}e^{-j2\pi f\tau}\sum_{n=-\infty}^{+\infty}\delta\left(f-\nu-n\frac{1}{T}\right)
+		\end{aligned}
+	\end{equation}
+	\section{Zak-OTFS}
+	假设在发送端最后的数据是$x_{dd}^{w_{tx}}(\tau,\nu)$,在接收端最初的数据为$y_{dd}(\tau,\nu)$，他们的关系（由文献给出）可以表示为：
+	\begin{equation}
+		\label{eq8.1}
+		\begin{aligned}
+			y_{dd}(\tau,\nu) &= \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty}x_{dd}^{w_{tx}}(\tau-\tau',\nu-\nu') h(\tau',\nu') e^{j2\pi\nu' (\tau-\tau')}d\tau' d\nu'\\
+			&= h(\tau,\nu) *_\sigma x_{dd}^{w_{tx}}(\tau,\nu)
+		\end{aligned}
+	\end{equation}
+	其中$*_\sigma$表示满足结合律但不满足交换律的扭曲卷积，定义为：
+	\begin{equation}
+		\label{eq9.1}
+		\begin{aligned}
+			a(\tau,\nu)*_{\sigma}b(\tau,\nu)\stackrel{\Delta}{=}\int\int a(\tau^{\prime},\nu^{\prime})b(\tau-\tau^{\prime},\nu-\nu^{\prime})e^{j2\pi\nu^{\prime}(\tau-\tau^{\prime})}d\tau^{\prime}d\nu^{\prime}
+		\end{aligned}
+	\end{equation}
+	但是分别看这两个信号的时域表示，可以得到：
+	\begin{equation}
+		\label{eq10.1}
+		\begin{aligned}
+			r(t)&=\int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} s(t-\tau)h(\tau,\nu)e^{j2\pi\nu(t-\tau)}d\tau d\nu\\
+			&= h(\tau,\nu)*_\sigma s(t)
+		\end{aligned}
+	\end{equation}
+	其中$r(t)=Z^{-1}_T\{ x_{dd}^{w_{tx}}(\tau,\nu) \}$，$s(t)=Z^{-1}_T\{ y_{dd}(\tau,\nu) \}$分别表示发送和接收DD域信号的Zak逆变换。即表示发送和接收信号的时域表示。
+	\par
+	但是这样可以看到，不论是信号的时域表示还是DD域表示，\textbf{都经过的是相同的信道}，即与信道的扭曲卷积。
+
+	\vspace{.5cm}
+
+	Remark:
+	\begin{itemize}
+		\item 时域信号和DD域信号在无线信道中所受的影响是相同的，即信道的扭曲卷积，这种性质是Zak-OTFS独有的吗。
+	\end{itemize}
+	这里有个表格简要说明了ZakOTFS的流程
+	\begin{table}
+		\begin{tabular}{|c|c|}
+		\hline
+		Transceiver operation & OTFS \\
+		\hline
+		Generating the 
+		discrete information signal & $\begin{gathered}
+			x_{\mathrm{dd}}\left[k+nM,l+mN\right]\triangleq  \\
+			\left\{\begin{matrix}x[k,l],m=n=0\\x[k,l]e^{j2\pi n\frac{l}{N}},\text{otherwise}\end{matrix}\right.
+			\end{gathered}$ \\
+		\hline
+		Shaping the pulse at the transmitter & $\begin{gathered}
+			\Lambda_{\mathrm{dd}}=\left\{\left(k\frac{\tau_{p}}{M},l\frac{\nu_{p}}{N}\right)\right|k,l\in\mathbb{Z}\biggr\} \\
+			x_{\mathrm{dd}}(\tau,\nu)=\sum_{k,l\in\mathbb{Z}}x_{\mathrm{dd}}[k,l]\delta(\tau-k\frac{\tau_{p}}{M})\delta(\nu-l\frac{\nu_{p}}{N}) 
+			\end{gathered}$ \\
+		\hline
+		Converting from the modulation domain to the TD & data6 \\
+		\hline
+		\end{tabular}
+		\caption{Signal Processing Steps in Zak-OTFS}
+		\label{tab:my_label}
+		\end{table}
+	\subsection{Twisted Convolution Property}
+	疑问：如何通过将 
+	\begin{equation}
+		\begin{aligned}r_1(t)=\int\int h_1(\tau,\nu)e^{j2\pi\nu(t-\tau)}s(t-\tau)\mathrm d\tau\mathrm d\nu\end{aligned}
+	\end{equation}
+	带入
+	\begin{equation}
+		\begin{aligned}r(t)=\int\int h_2(\tau,\nu)e^{j2\pi\nu(t-\tau)}r_1(t-\tau)\mathrm d\tau\mathrm d\nu
+		\end{aligned}
+	\end{equation}
+	得到
+	\begin{equation}
+		\begin{aligned}
+			r(t)=\int\int h(\tau,\nu)e^{j2\pi\nu(t-\tau)}s(t-\tau)\mathrm{d}\tau\mathrm{d}\nu
+		\end{aligned}
+	\end{equation}
+	其中
+	\begin{equation}
+		\begin{aligned}h(\tau,\nu)=\int\int h_2(\tau',\nu')h_1(\tau-\tau',\nu-\nu')e^{j2\pi\nu'(\tau-\tau')}\mathrm d\tau'\mathrm d\nu'\end{aligned}
+	\end{equation}
+请逐步说明。
+
+	为了通过将 \( r_1(t) \) 带入 \( r(t) \) 得到最终的结果 \( r(t) \)，我们需要仔细展开和结合这些方程。我们有：
+
+1. **第一个方程**：
+   \[
+   r_1(t) = \int\int h_1(\tau,\nu) e^{j2\pi\nu(t-\tau)} s(t-\tau) \, \mathrm{d}\tau \, \mathrm{d}\nu
+   \]
+
+2. **第二个方程**：
+   \[
+   r(t) = \int\int h_2(\tau,\nu) e^{j2\pi\nu(t-\tau)} r_1(t-\tau) \, \mathrm{d}\tau \, \mathrm{d}\nu
+   \]
+
+首先，我们将第一个方程 \( r_1(t) \) 代入第二个方程中的 \( r_1(t-\tau) \)。
+
+展开第二个方程：
+
+\[
+r(t) = \int\int h_2(\tau,\nu) e^{j2\pi\nu(t-\tau)} r_1(t-\tau) \, \mathrm{d}\tau \, \mathrm{d}\nu
+\]
+
+将 \( r_1(t-\tau) \) 表达式代入：
+
+\[
+r_1(t-\tau) = \int\int h_1(\tau',\nu') e^{j2\pi\nu'(t-\tau-\tau')} s(t-\tau-\tau') \, \mathrm{d}\tau' \, \mathrm{d}\nu'
+\]
+
+因此，
+
+\[
+r(t) = \int\int h_2(\tau,\nu) e^{j2\pi\nu(t-\tau)} \left( \int\int h_1(\tau',\nu') e^{j2\pi\nu'(t-\tau-\tau')} s(t-\tau-\tau') \, \mathrm{d}\tau' \, \mathrm{d}\nu' \right) \, \mathrm{d}\tau \, \mathrm{d}\nu
+\]
+
+现在我们将这些积分合并在一起。首先注意到 \( e^{j2\pi\nu(t-\tau)} \) 和 \( e^{j2\pi\nu'(t-\tau-\tau')} \) 可以合并为一个指数项：
+
+\[
+r(t) = \int\int h_2(\tau,\nu) \int\int h_1(\tau',\nu') e^{j2\pi\nu(t-\tau)} e^{j2\pi\nu'(t-\tau-\tau')} s(t-\tau-\tau') \, \mathrm{d}\tau' \, \mathrm{d}\nu' \, \mathrm{d}\tau \, \mathrm{d}\nu
+\]
+
+将指数项合并：
+
+\[
+r(t) = \int\int \int\int h_2(\tau,\nu) h_1(\tau',\nu') e^{j2\pi\nu(t-\tau)} e^{j2\pi\nu'(t-\tau-\tau')} s(t-\tau-\tau') \, \mathrm{d}\tau' \, \mathrm{d}\nu' \, \mathrm{d}\tau \, \mathrm{d}\nu
+\]
+
+由于指数的性质 \( e^{j2\pi\nu(t-\tau)} e^{j2\pi\nu'(t-\tau-\tau')} = e^{j2\pi(\nu(t-\tau) + \nu'(t-\tau-\tau'))} = e^{j2\pi((\nu + \nu')(t-\tau) - \nu'\tau')} \)，
+
+所以：
+
+\[
+r(t) = \int\int \int\int h_2(\tau,\nu) h_1(\tau',\nu') e^{j2\pi(\nu + \nu')(t-\tau)} e^{-j2\pi\nu'\tau'} s(t-\tau-\tau') \, \mathrm{d}\tau' \, \mathrm{d}\nu' \, \mathrm{d}\tau \, \mathrm{d}\nu
+\]
+
+现在我们可以重新定义变量，设 \( \nu'' = \nu + \nu' \) 和 \( \tau'' = \tau + \tau' \)。但是为了简化计算过程，我们可以先处理内层的积分。
+
+令 \( \nu'' = \nu + \nu' \)，则 \( \nu = \nu'' - \nu' \)。重命名积分变量：
+
+\[
+r(t) = \int\int \int\int h_2(\tau,\nu'' - \nu') h_1(\tau',\nu') e^{j2\pi\nu''(t-\tau)} e^{-j2\pi\nu'\tau'} s(t-\tau-\tau') \, \mathrm{d}\tau' \, \mathrm{d}\nu' \, \mathrm{d}\tau \, \mathrm{d}\nu''
+\]
+
+将 \(\nu''\) 和 \(\nu'\) 的积分分开：
+
+\[
+r(t) = \int \int e^{j2\pi\nu''(t-\tau)} \left( \int \int h_2(\tau,\nu'' - \nu') h_1(\tau',\nu') e^{-j2\pi\nu'\tau'} \, \mathrm{d}\tau' \, \mathrm{d}\nu' \right) s(t-\tau) \, \mathrm{d}\tau \, \mathrm{d}\nu''
+\]
+
+定义新的卷积核：
+
+\[
+h(\tau,\nu'') = \int \int h_2(\tau,\nu'' - \nu') h_1(\tau',\nu') e^{-j2\pi\nu'\tau'} \, \mathrm{d}\tau' \, \mathrm{d}\nu'
+\]
+
+因此，最后得到：
+
+\[
+r(t) = \int\int h(\tau,\nu'') e^{j2\pi\nu''(t-\tau)} s(t-\tau) \, \mathrm{d}\tau \, \mathrm{d}\nu''
+\]
+
+重新命名 \(\nu''\) 为 \(\nu\)，则：
+
+\[
+r(t) = \int\int h(\tau,\nu) e^{j2\pi\nu(t-\tau)} s(t-\tau) \, \mathrm{d}\tau \, \mathrm{d}\nu
+\]
+
+其中，
+
+\[
+h(\tau,\nu) = \int \int h_2(\tau',\nu') h_1(\tau - \tau', \nu - \nu') e^{-j2\pi\nu'\tau'} \, \mathrm{d}\tau' \, \mathrm{d}\nu'
+\]
+
+这样我们就完成了从 \( r_1(t) \) 和 \( r(t) \) 的表达式推导出最终结果的过程。
+
+以上是GPT4o推导的过程，存在不少的错误。正确的推导如下：
+\subsection{Discrete Zak Transform}
+	离散Zak变换的定义为：
+	\begin{equation}
+		\label{eq11.1}
+		\begin{aligned}
+			\mathcal{DZ}_T\{x[n]\}(\tau,\nu)=\sum_{n=-\infty}^{+\infty}x[n]e^{-j2\pi nT\nu}\delta(\tau-nT)
+		\end{aligned}
+	\end{equation}
+	离散的Zak变换和连续的区别主要在于对连续时间序列的采样。
+	\section{Zak变换的性质}% 一级标题
+	Zak变换的性质有：卷积性质、频率平移性质、时延性质、共轭性质、Parseval定理等。
+
+	\subsection{卷积性质}
+	Zak变换的卷积性质可以表示为：
+	\begin{equation}
+	\label{eq8}
+	\begin{aligned}
+	\mathcal{Z}\{x[n]*y[n]\}(\tau, \nu) = \mathcal{Z}\{x[n]\}(\tau, \nu) \cdot \mathcal{Z}\{y[n]\}(\tau, \nu)
+	\end{aligned}
+	\end{equation}
+
+	\subsection{频率平移性质}
+	Zak变换的频率平移性质可以表示为：
+	\begin{equation}
+	\label{eq9}
+	\begin{aligned}
+	\mathcal{Z}\{x[n-k]\}(\tau, \nu) = e^{-j2\pi k\nu T} \cdot \mathcal{Z}\{x[n]\}(\tau, \nu)
+	\end{aligned}
+	\end{equation}
+
+	\subsection{时延性质}
+	Zak变换的时延性质可以表示为：
+	\begin{equation}
+	\label{eq10}
+	\begin{aligned}
+	\mathcal{Z}\{x[n]\}(\tau-kT, \nu) = e^{-j2\pi k\tau} \cdot \mathcal{Z}\{x[n]\}(\tau, \nu)
+	\end{aligned}
+	\end{equation}
+
+	\subsection{共轭性质}
+	Zak变换的共轭性质可以表示为：
+	\begin{equation}
+	\label{eq11}
+	\begin{aligned}
+	\mathcal{Z}\{x^*[n]\}(\tau, \nu) = \mathcal{Z}\{x[n]\}^*(\tau, -\nu)
+	\end{aligned}
+	\end{equation}
+
+	\subsection{Parseval定理}
+	Zak变换的Parseval定理可以表示为：
+	\begin{equation}
+	\label{eq12}
+	\begin{aligned}
+	\sum_{n=-\infty}^{+\infty}|x[n]|^2 = \frac{1}{T} \int_{-\infty}^{+\infty}|\mathcal{Z}\{x[n]\}(\tau, \nu)|^2 d\tau d\nu
+	\end{aligned}
+	\end{equation}
+	文章说明了Zak变换的基本概念、公式推导和基本性质，对于理解Zak变换有一定的帮
+	\section{高级人工智能}
+	\subsection{9th week, 2024.4.25}
+	第九周 2024年4月25日 教师王红军是
+
+	文献1 《A Global Geometric Framework for Nonlinear Dimensionality Reduction》
+
+	文献2 《Reducing the Dimensionality of Data with Neural Networks》
+
+	文献2是神经网络进行数据降维的开篇文献，描述了神经网络进行数据降维的基本原理。
+	文献1是利用流形学习的方法是降维的方法。
+	文献3 《》
+	判断离散变量的相似性，代码一直没开源，后面讲的一系列东西都是改进，如何进行展示，最后再看一下
+
+	文献4 《human level concept learning through probabilistic program induction》
+	
+	文献4讲了概率编程的概念，概率编程是一种新的编程范式，可以用来解决很多问题，如人类概念学习等。该文章发表在2015年的《Science》杂志上，是一篇非常重要的文章。
+	大概讲的是机器学习在science上的应用
+	\subsection{10th week Advanced AI PenglinDai}
+	智能边缘计算
+
+	边缘人工智能，单个边缘设备，边缘服务器扩展到多个，发表在TWC中。可能存在多个边缘服务器，负载不同，用户并不能试试感知环境的特征，相关的速率和边缘的负载，是边缘服务器的隐私数据，如何做卸载，边缘服务器的计算资源是有限的，会造成负载，时延和效率中做tradeoff。
+	如何进行tradeoff是这个文章考虑的重点。设计资源卸载的控制器，问题是需要设计资源感知的卸载的控制器，如何设计这个控制器，是这个文章的重点。
+	在这个领域中，设计的算法需要实时在线的推理，《deep learning video analytics throuth online learning based edge computin呃。所以游戏的方式呢，就是刚开始的时候的方差会员呢。所以就算你的这个希望的这个是比较小，你所带来的政策还是会比较大的，那么我的选择是每次都选择。这个两个，两者之和最大的一个。最大的一个这个这个动作，所以。呃，刚开始的时候。啊，每一个动作其实都有可能被骗掉。啊，就是比较。但是随着这个我觉得自己越多的时候。啊，我看你别说我这边只是独立小但是我真实的估计出来的。这个希望指数越大。所以到后面是希望越小。啊，被选择的概率最小。啊，所以这个是对于自己的待遇，真的是。他会有自信的。这个参数啊，来去。实现。这个这个一般的典型的这种，呃，探索利用体制。那这里面呢就是这个游戏的方法。啊。那这里呢，会有一个问题啊，就是他在做评估的时候，他其实是需要去根据我的历史的这个。呃，观测数据啊，去去算一个。呃，协方差的。还有一个矩阵，但你的结算矩阵变大的时候说我历史的观测数据。变大了。我是郑州非常大的矩阵大的时候它这个它里面会涉及到一个球衣的一个。一个一个操作啊。所以当你越大的时候，你求逆。就会有困难。啊。所以这个方法其实是有一定的局在我身上，请你。呃这个限性。观测数据越多的情况。啊，那我就效率速度越慢。所以里面呢，也会有人去设计一些机制啊那这个跟我们的这个。呃，基于这个思路说实在的。方法是有一定的距离。但是它的这个肉的结果。我觉得我就是大家。稍微过一下，因为他其实讲的就是一个。呃呃。好的不好的话开发发展不了，是吧？他的这个都是比较OK的。所以他在那个。呃，精度和我的处理的事情这个数据之间啊。啊。哎呀，今天做这个相关卸载。然后呢，这也是，呃，一篇表演型的啊，就是在这个上面邂逅里面做事是有分析的。啊，他的作品要数的同样，这篇文章是二十年在中国看不出来。
+	
+	"edge-assisted online on-device object detection for real-time video analytics" 时间的代价，这里非常重要的事情也是做平衡，资源有限时候，把时延作为约束，将这个问题建模成非线性实现耦合的问题，将这个问题分解成各种你这个。这个算法算法的这个。这个这个阈值实际上。啊，这个。那这个时代代表什么？就是我们。的时候的话都可以发现，就是。啊，我们的这种能力Buds啊，它都会有偏移量啊，会有偏移量，就是说我上一次看下一天时间。因为我是两个严重对吧？如果我的世界范围内不是太严重。所以呢，它的这个Vox呢，会有一定的这个。这个。这个偏移量。还可以。啊，他就是啊，他就去转了一圈以后他发现就是我但我偏一个大的时候。我最终的。这个。这个精度下降可以更多。所以它在这里呢，里面呢就设了一定。啊，就是说。呃WK键大于我设定的阈值的时候呢，我就把他。谢谢大家，我们。呃，这个边复制上面去。去做相应的。所以那么这个，呃，该案主要小的时候呢，我就假设啊，我的这个最终是由。这个精度是比较高的。啊那。什么？那重点呢，就在于怎么去优化这个这个设定的变量与。那这个电源的下面呢？啊，他们就做了相应的一些这个，呃。呃。理论上也是吧。主要还是。其实就是对他。这个。这个构建的非线性的这个。这个优化问题。对它进行结构。啊，结果最后还是把它搞成一个线性规划的一个。和力量。呃，不干净的这个一个问题啊今天programming最好。啊，就用一个线性的一个一个power就可以把它剪掉。而且一些动作
+
+	"A Co-Scheduling Framework for DNN models on mobile and edge device with Heterogeneous hardware"，在估计网络的时候可能会带系统的状态，强化学习带的，一般来说在边缘计算的领域中，转移概率是未知的，一般通过统一模型的方式去解出来。呃且些动作，然后得到我们的测
+
+	"HiveMind: Towards Cellular Native Machine Learning Model Splitting" 图的算法的思想求解方案。
+
+	edge task off-loading. co-sensing 
+	\section{Bibtex格式参考}
+	所有类型的参考文献格式都整理在这里了，可以直接复制粘贴到你的文档中。文件来源：
+	
+	\url{https://blog.csdn.net/Ryan_lee9410/article/details/106055787}。
+
+	\begin{verbatim}
+	@article{RN01,
+	author = {Peter Adams}, 
+	title = {The title of the work},
+	journal = {The name of the journal},
+	year = 1993,
+	number = 2,
+	pages = {201-213},
+	month = 7,
+	note = {An optional note}, 
+	volume = 4
+	}
+
+	@manual{manual01,
+	title = {FuTURE白皮书 - 正交时频空方案（OTFS）白皮书},
+	year = 2024,
+	month = 4,
+	}
+	\end{verbatim}
+    
+	\begin{table}[h!]
+		\begin{center}
+			\caption{Bibtex格式参考}
+			\begin{tabular}{|c|c|}
+				\hline
+				\textbf{参考文献类型 + 例子} & \textbf{说明} \\
+				\hline
+				期刊 & @article\{author,title,journal,year,volume,number,pages\} \\
+				\hline
+				会议 & @inproceedings\{author,title,booktitle,year,pages\} \\
+				\hline
+				书籍 & @book\{author,title,publisher,year\} \\
+				\hline
+				学位论文 & @thesis\{author,title,school,year\} \\
+				\hline
+				报告 & @techreport\{author,title,institution,year\} \\
+				\hline
+				专利 & @patent\{author,title,number,year\} \\
+				\hline
+				标准 & @standard\{author,title,number,year\} \\
+				\hline
+				电子资源 & @electronic\{author,title,howpublished,year\} \\
+				\hline
+			\end{tabular}
+		\end{center}
+	\end{table}
+	\section{山东高速考察}
+	从边缘服务器发送请求到收到数据的时延与传感器有很大关系，各个传感器之间的数据同步需要时间，在山东高速的测试中，其配备的传感器同步大概需要几百毫秒，接着再将数据传输到服务器大概也是几百毫秒（山东高速测试基地的数据）
+    
+	\section{Acknowledgement}
+	Thanks for reading this article. If you have any questions, please feel free to contact me.
+\end{document}
